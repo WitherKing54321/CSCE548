@@ -1,0 +1,2 @@
+-- create_tables.sql
+-- TODO: create tables for studio, anime, genre, anime_genre

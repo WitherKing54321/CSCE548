@@ -1,11 +1,12 @@
+import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-DB_NAME = "anime_db"
-DB_USER = "anime_user"
-DB_PASSWORD = "anime_pass"
-DB_HOST = "localhost"
-DB_PORT = 5432
+DB_NAME = os.getenv("DB_NAME", "anime_db")
+DB_USER = os.getenv("DB_USER", "anime_user")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "anime_pass")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", "5432"))
 
 
 def get_connection():

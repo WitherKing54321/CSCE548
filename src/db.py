@@ -50,6 +50,19 @@ def list_studios():
         conn.close()
 
 
+def get_studio_by_id(studio_id: int):
+    conn = get_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                "SELECT studio_id, name, country FROM studio WHERE studio_id=%s;",
+                (studio_id,),
+            )
+            return cur.fetchone()
+    finally:
+        conn.close()
+
+
 def update_studio_country(studio_id: int, new_country: str) -> bool:
     conn = get_connection()
     try:
@@ -181,6 +194,58 @@ def list_genres():
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute("SELECT genre_id, name FROM genre ORDER BY name;")
+            return cur.fetchall()
+    finally:
+        conn.close()
+
+
+def get_genre_by_id(genre_id: int):
+    conn = get_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                "SELECT genre_id, name FROM genre WHERE genre_id=%s;",
+                (genre_id,),
+            )
+            return cur.fetchone()
+    finally:
+        conn.close()
+
+
+def list_genres_for_anime(anime_id: int):
+    conn = get_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT g.genre_id, g.name
+                FROM genre g
+                JOIN anime_genre ag ON ag.genre_id = g.genre_id
+                WHERE ag.anime_id = %s
+                ORDER BY g.name;
+                """,
+                (anime_id,),
+            )
+            return cur.fetchall()
+    finally:
+        conn.close()
+
+
+def list_anime_for_genre(genre_id: int):
+    conn = get_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT a.anime_id, a.title, a.release_year, a.episodes, s.name AS studio
+                FROM anime a
+                JOIN anime_genre ag ON ag.anime_id = a.anime_id
+                JOIN studio s ON s.studio_id = a.studio_id
+                WHERE ag.genre_id = %s
+                ORDER BY a.title;
+                """,
+                (genre_id,),
+            )
             return cur.fetchall()
     finally:
         conn.close()

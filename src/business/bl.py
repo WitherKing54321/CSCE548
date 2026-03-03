@@ -13,6 +13,11 @@ def create_studio(name: str, country: str) -> int:
 def list_studios():
     return db.list_studios()
 
+def get_studio_by_id(studio_id: int):
+    if studio_id <= 0:
+        raise ValueError("studio_id must be positive")
+    return db.get_studio_by_id(studio_id)
+
 def update_studio_country(studio_id: int, new_country: str) -> bool:
     if studio_id <= 0:
         raise ValueError("studio_id must be positive")
@@ -76,6 +81,11 @@ def create_genre(name: str) -> int:
 def list_genres():
     return db.list_genres()
 
+def get_genre_by_id(genre_id: int):
+    if genre_id <= 0:
+        raise ValueError("genre_id must be positive")
+    return db.get_genre_by_id(genre_id)
+
 def add_genre_to_anime(anime_id: int, genre_id: int) -> bool:
     if anime_id <= 0 or genre_id <= 0:
         raise ValueError("IDs must be positive")
@@ -85,3 +95,13 @@ def remove_genre_from_anime(anime_id: int, genre_id: int) -> bool:
     if anime_id <= 0 or genre_id <= 0:
         raise ValueError("IDs must be positive")
     return db.remove_genre_from_anime(anime_id, genre_id)
+
+def list_genres_for_anime(anime_id: int):
+    if anime_id <= 0:
+        raise ValueError("anime_id must be positive")
+    return db.list_genres_for_anime(anime_id)
+
+def list_anime_for_genre(genre_id: int):
+    if genre_id <= 0:
+        raise ValueError("genre_id must be positive")
+    return db.list_anime_for_genre(genre_id)

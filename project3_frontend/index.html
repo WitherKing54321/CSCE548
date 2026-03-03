@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSCE 548 Project 3 - Anime DB Client</title>
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1, h2 { margin-top: 30px; }
+    button { margin: 6px 6px 6px 0; padding: 8px 12px; }
+    input { padding: 6px; width: 120px; margin-right: 6px; }
+    pre { background: #f3f3f3; padding: 12px; border-radius: 6px; overflow: auto; }
+    .row { margin: 12px 0; }
+    code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+
+<body>
+
+  <h1>Anime DB Client</h1>
+  <p>API Base: <code id="baseUrl"></code></p>
+
+  <!-- ======================= -->
+  <!-- GET SECTION -->
+  <!-- ======================= -->
+
+  <h2>GET (Read)</h2>
+
+  <div class="row">
+    <button onclick="getAllAnime()">GET /anime</button>
+    <button onclick="getAllStudios()">GET /studios</button>
+    <button onclick="getAllGenres()">GET /genres</button>
+  </div>
+
+  <div class="row">
+    <label>Anime ID:</label>
+    <input id="animeId" value="1" />
+    <button onclick="getAnimeById()">GET /anime/{id}</button>
+    <button onclick="getGenresForAnime()">GET /anime/{id}/genres</button>
+  </div>
+
+  <div class="row">
+    <label>Studio ID:</label>
+    <input id="studioId" value="1" />
+    <button onclick="getStudioById()">GET /studios/{id}</button>
+  </div>
+
+  <div class="row">
+    <label>Genre ID:</label>
+    <input id="genreId" value="1" />
+    <button onclick="getGenreById()">GET /genres/{id}</button>
+    <button onclick="getAnimeForGenre()">GET /genres/{id}/anime</button>
+  </div>
+
+  <!-- ======================= -->
+  <!-- POST SECTION -->
+  <!-- ======================= -->
+
+  <h2>POST (Create Anime)</h2>
+
+  <div class="row">
+    <input id="newTitle" placeholder="Title" />
+    <input id="newYear" placeholder="Year" />
+    <input id="newEpisodes" placeholder="Episodes" />
+    <input id="newStudioId" placeholder="Studio ID" />
+    <button onclick="createAnime()">POST /anime</button>
+  </div>
+
+  <!-- ======================= -->
+  <!-- PUT SECTION -->
+  <!-- ======================= -->
+
+  <h2>PUT (Update Anime)</h2>
+
+  <div class="row">
+    <input id="updateAnimeId" placeholder="Anime ID" />
+    <input id="updateTitle" placeholder="Title" />
+    <input id="updateYear" placeholder="Year" />
+    <input id="updateEpisodes" placeholder="Episodes" />
+    <input id="updateStudioId" placeholder="Studio ID" />
+    <button onclick="updateAnime()">PUT /anime/{id}</button>
+  </div>
+
+  <!-- ======================= -->
+  <!-- DELETE SECTION -->
+  <!-- ======================= -->
+
+  <h2>DELETE (Delete Anime)</h2>
+
+  <div class="row">
+    <input id="deleteAnimeId" placeholder="Anime ID" />
+    <button onclick="deleteAnime()">DELETE /anime/{id}</button>
+  </div>
+
+  <!-- ======================= -->
+  <!-- RESPONSE -->
+  <!-- ======================= -->
+
+  <h2>Response</h2>
+  <pre id="output">Click a button to call the API...</pre>
+
+  <script src="app.js"></script>
+
+</body>
+</html>

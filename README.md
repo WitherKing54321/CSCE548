@@ -1,183 +1,244 @@
-# CSCE 548 - Project 1 (Anime Database)
+CSCE 548 Anime Database Project
+Overview
 
-This project creates a small relational database (anime/studios/genres) with test data,
-plus a console application that retrieves records from the database.
+This project implements a three-tier Anime Database application using PostgreSQL, FastAPI, and a web-based frontend. The system allows users to browse, insert, update, and delete anime records through a web interface that communicates with a backend API and a relational database.
 
-## Folder structure
-- `sql/` - SQL scripts to create tables and insert test data
-- `src/` - Console app + data access layer code
-- `screenshots/` - Proof screenshots for submission
+The project evolved through multiple stages of development:
 
-## How to run (will fill in as project progresses)
-1. Run `sql/create_tables.sql`
-2. Run `sql/insert_data.sql`
-3. Run the console app in `src/`
+Project 1: Database schema creation and console database access
 
-# CSCE 548 – Project 2  
-Brandon Wells  
+Project 2: Implementation of a layered architecture with business logic and REST API services
 
-## Overview
+Project 3: Development of a browser-based frontend interface
 
-This project implements a PostgreSQL-backed Anime Database using a layered architecture:
+Project 4: Full system integration, testing, and deployment documentation
 
-- Data Access Layer (`db.py`)
-- Business Layer (`business/bl.py`)
-- Service Layer (FastAPI – `services/api.py`)
-- Console Client (`client.py`)
+The final system demonstrates a complete n-tier architecture with a client layer, service layer, business layer, and data layer.
 
-Project 2 extends Project 1 by wrapping all database operations in a Business Layer and exposing them through RESTful microservices.
+Architecture
 
----
+The application follows a layered design where each layer has a specific responsibility.
 
-## Architecture
+Client (Web Interface) → Service Layer (FastAPI) → Business Layer → Data Layer → PostgreSQL
 
-Console Client → Service Layer (FastAPI) → Business Layer → Data Layer → PostgreSQL
+Client Layer
 
-All CRUD methods in `db.py` are:
-- Wrapped in `business/bl.py`
-- Exposed via `services/api.py`
-- Tested through `client.py`
+HTML and JavaScript interface
 
----
+Sends API requests to the backend service
 
-## Setup
+Service Layer
 
-### 1. Install Dependencies
+Implemented with FastAPI
 
-From project root:
+Handles HTTP requests and routes them to the business layer
 
-```bash
-python3 -m pip install -r requirements.txt
-```
+Business Layer
 
-If needed:
+Implements business logic
 
-```bash
-python3 -m pip install fastapi uvicorn requests psycopg2-binary
-python3 -m pip freeze > requirements.txt
-```
+Wraps all database operations
 
----
+Data Layer
 
-### 2. Database Setup
+Handles database communication using PostgreSQL
 
-Ensure PostgreSQL is running.
+Technologies Used
 
-Run:
+Python 3
+FastAPI
+Uvicorn
+PostgreSQL
+HTML
+JavaScript
 
-```bash
+Python libraries used:
+
+fastapi
+uvicorn
+psycopg2-binary
+requests
+
+Project Structure
+Project_1
+│
+├── project3_frontend
+│   ├── index.html
+│   └── app.js
+│
+├── sql
+│   ├── create_tables.sql
+│   └── insert_data.sql
+│
+├── src
+│   ├── main.py
+│   ├── db.py
+│   ├── client.py
+│   ├── openapi.json
+│   │
+│   ├── business
+│   │   └── bl.py
+│   │
+│   └── services
+│       └── api.py
+│
+├── requirements.txt
+└── README.md
+Features
+
+The application supports full CRUD functionality.
+
+Users can:
+
+View all anime records
+
+View all studios
+
+View all genres
+
+Search for anime by ID
+
+View genres associated with an anime
+
+View anime associated with a genre
+
+Add new anime records
+
+Update anime records
+
+Delete anime records
+
+All operations are performed through the FastAPI service layer and stored in the PostgreSQL database.
+
+Setup Instructions
+1. Clone the Repository
+git clone https://github.com/WitherKing54321/CSCE548.git
+cd CSCE548/Project_1
+2. Install Python Dependencies
+
+Install the required Python libraries.
+
+pip install -r requirements.txt
+
+If dependencies need to be installed manually:
+
+pip install fastapi uvicorn requests psycopg2-binary
+3. Database Setup
+
+Ensure PostgreSQL is installed and running.
+
+Open PostgreSQL:
+
+sudo -u postgres psql
+
+Create the project database:
+
+CREATE DATABASE anime_db;
+
+Exit PostgreSQL:
+
+\q
+4. Create Database Tables
+
+Run the SQL script to create the required tables.
+
 sudo -u postgres psql anime_db -f sql/create_tables.sql
+5. Insert Initial Data
+
+Populate the database with starter records.
+
 sudo -u postgres psql anime_db -f sql/insert_data.sql
-```
 
-Default connection settings:
+These scripts create the anime, studio, genre, and relationship tables with sample data.
 
-```
-DB_NAME=anime_db
-DB_USER=anime_user
-DB_PASSWORD=anime_pass
-DB_HOST=localhost
-DB_PORT=5432
-```
+Running the Backend Service
 
-Environment variables can override these values for hosting.
+Navigate to the backend source directory.
 
----
-
-## Run the Microservice
-
-From `src` directory:
-
-```bash
 cd src
+
+Start the FastAPI server.
+
 python3 -m uvicorn services.api:app --reload --port 8000
-```
 
-Test health endpoint:
+If successful, the server will run at:
 
-```bash
-python3 -c "import requests; print(requests.get('http://127.0.0.1:8000/health').json())"
-```
+http://127.0.0.1:8000
 
----
+A health endpoint is available for testing:
 
-## Run the Console Client (Full CRUD Demo)
+GET /health
+Running the Frontend
 
-In a second terminal:
+Navigate to the frontend directory.
 
-```bash
-cd src
-python3 client.py
-```
+cd ../project3_frontend
 
-The client demonstrates:
+Open the web interface:
 
-- Create Studio
-- Create Genre
-- Create Anime
-- Read Anime
-- Update Anime
-- Add/Remove Genre Mapping
-- Update Studio Country
-- Delete Anime
-- Delete Studio
-- List remaining records
+xdg-open index.html
 
-All operations occur through the service layer (not directly to the database).
+The webpage provides the user interface for interacting with the anime database.
 
----
+API Endpoints
+Health
 
-## API Endpoints
+GET /health
 
-### Health
-- GET /health
+Anime
 
-### Anime
-- GET /anime
-- GET /anime/{anime_id}
-- POST /anime
-- PUT /anime/{anime_id}
-- DELETE /anime/{anime_id}
+GET /anime
+GET /anime/{anime_id}
+POST /anime
+PUT /anime/{anime_id}
+DELETE /anime/{anime_id}
 
-### Studios
-- GET /studios
-- POST /studios
-- PUT /studios/{studio_id}/country
-- DELETE /studios/{studio_id}
+Studios
 
-### Genres
-- GET /genres
-- POST /genres
+GET /studios
+POST /studios
+PUT /studios/{studio_id}/country
+DELETE /studios/{studio_id}
 
-### Anime-Genre Mapping
-- POST /anime/{anime_id}/genres/{genre_id}
-- DELETE /anime/{anime_id}/genres/{genre_id}
+Genres
 
----
+GET /genres
+POST /genres
 
-## Hosting
+Anime-Genre Mapping
 
-Start command for deployment:
+POST /anime/{anime_id}/genres/{genre_id}
+DELETE /anime/{anime_id}/genres/{genre_id}
 
-```bash
+Testing
+
+System testing was performed to verify that all layers communicate correctly.
+
+The following operations were tested successfully:
+
+GET requests retrieving anime, studios, and genres
+POST requests inserting new anime records
+PUT requests updating existing anime records
+DELETE requests removing anime records
+
+Database queries were used to verify that the changes were correctly applied.
+
+Screenshots demonstrating these tests are included in the project documentation.
+
+Deployment
+
+For hosted environments, the API can be started with:
+
 uvicorn services.api:app --host 0.0.0.0 --port $PORT
-```
 
-Environment variables required for hosted database:
+Database connection settings can be configured using environment variables:
 
-```
 DB_NAME
 DB_USER
 DB_PASSWORD
 DB_HOST
 DB_PORT
-```
 
----
+Author
 
-## Status
-
-- Business Layer implemented
-- All CRUD methods exposed via microservice
-- Console client validates end-to-end functionality
-- Ready for hosting
+Brandon Wells
